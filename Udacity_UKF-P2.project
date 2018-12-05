@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Udacity_UKF-P2" InternalType="">
+  <Plugins>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
+  </Plugins>
   <VirtualDirectory Name="src">
     <VirtualDirectory Name="Eigen">
       <VirtualDirectory Name="src">
@@ -332,9 +349,11 @@
       </VirtualDirectory>
     </VirtualDirectory>
     <File Name="src/main.cpp"/>
+    <File Name="src/kalman_filter.cpp"/>
     <File Name="src/measurement_package.h"/>
     <File Name="src/ukf.h"/>
     <File Name="src/tools.cpp"/>
+    <File Name="src/kalman_filter.h"/>
     <File Name="src/json.hpp"/>
     <File Name="src/tools.h"/>
     <File Name="src/ukf.cpp"/>
@@ -374,8 +393,8 @@
         <LibraryPath Value="Debug"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="./Debug" PauseExecWhenProcTerminates="no" IsGUIProgram="no" IsEnabled="yes"/>
-      <Environment EnvVarSetName="&lt;Use Workspace Settings&gt;" DbgSetName="&lt;Use Global Settings&gt;">
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="./Debug" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
@@ -385,15 +404,15 @@
       </Debugger>
       <PreBuild/>
       <PostBuild/>
-      <CustomBuild Enabled="no">
-        <RebuildCommand/>
-        <CleanCommand/>
-        <BuildCommand/>
+      <CustomBuild Enabled="yes">
+        <RebuildCommand>rm -rf * &amp;&amp; cmake .. &amp;&amp; make</RebuildCommand>
+        <CleanCommand>rm -rf *</CleanCommand>
+        <BuildCommand>cmake .. &amp;&amp; make</BuildCommand>
         <PreprocessFileCommand/>
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName/>
-        <WorkingDirectory/>
+        <WorkingDirectory>/home/udacity/Project/src/Udacity/Term2/src/Udacity_UKF-P2/build</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
