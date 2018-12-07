@@ -95,9 +95,9 @@ The simulation tool generates sensor data for a single tracked object.
 - The yaw rate  in rad/second `yaw_rate`
 
 **Algorithm**
-* Get sensor data [L/R Data, Timestamp]
-    * If first measurement then initialize state vector [x] and state covariance matrix [P]
-    * Else compute the time difference [dt] between current sensor data timestamp and the previsous timestamp
+* Get sensor data `[L/R Data, Timestamp]`
+    * If first measurement then initialize state vector `[x]` and state covariance matrix `[P]`
+    * Else compute the time difference `[dt]` between current sensor data timestamp and the previsous timestamp
   
 * Predict `[x, P, Q, dt]`
     * Generate sigma points from state vector
@@ -113,14 +113,14 @@ The simulation tool generates sensor data for a single tracked object.
     * Output: Predicted sigma points `[x_sigma_pred]` 
 
 * Convert predicted sigma points to mean and covariance
-    * Input: Predicted sigma points `[x_sigma_pred] and Weights `[w]`
+    * Input: Predicted sigma points `[x_sigma_pred]` and Weights `[w]`
     * Output: Predicted state mean `[x_sigma_pred_mean]` and predicted state covariance `[x_sigma_pred_covariance]`
 
 * Update `[L/R Data, dt, w]`
     * Calculate cross correlation between the predicted state and the sensor data measurement
-        * Input: Predicted state [x_sigma_pred], sensor data measurement [L/R data], timestamp [t + dt]
+        * Input: Predicted state `[x_sigma_pred]`, sensor data measurement `[L/R data]`, timestamp `[t + dt]`
         * Output:  
-            * Cross correlation [Sum (weights * (difference of predicted sigma points in state space) * (difference of predicted sigma points in measurement space)')]
+            * Cross correlation `[Sum (weights * (difference of predicted sigma points in state space) * (difference of predicted sigma points in measurement space)')]`
             * Kalman Gain
             * NIS (Noise measurement intuition)
 
