@@ -349,11 +349,9 @@
       </VirtualDirectory>
     </VirtualDirectory>
     <File Name="src/main.cpp"/>
-    <File Name="src/kalman_filter.cpp"/>
     <File Name="src/measurement_package.h"/>
     <File Name="src/ukf.h"/>
     <File Name="src/tools.cpp"/>
-    <File Name="src/kalman_filter.h"/>
     <File Name="src/json.hpp"/>
     <File Name="src/tools.h"/>
     <File Name="src/ukf.cpp"/>

@@ -7,6 +7,8 @@ add_definitions(-std=c++11)
 set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_FLAGS}")
 set(sources src/ukf.cpp src/main.cpp src/tools.cpp)
+# For graph generation
+#set(sources src/ukf.cpp src/main.cpp src/tools.cpp src/matplotlibcpp.h)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") 
 include_directories(/usr/local/include)
@@ -18,3 +20,5 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 add_executable(UnscentedKF ${sources})
 target_link_libraries(UnscentedKF z ssl uv uWS)
+# For graph generation
+# target_link_libraries(UnscentedKF z ssl uv uWS python2.7)

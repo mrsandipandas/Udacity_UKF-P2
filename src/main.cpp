@@ -1,14 +1,19 @@
 #include <uWS/uWS.h>
 #include <iostream>
+#include <fstream>
 #include "json.hpp"
 #include <math.h>
 #include "ukf.h"
 #include "tools.h"
+/* #include "matplotlibcpp.h" */
 
 using namespace std;
-
+/* namespace plt = matplotlibcpp; */
+std::string file_name = "../data/ukf.txt";
 // for convenience
 using json = nlohmann::json;
+
+//Save ground truth, prediction and NIS for laser and radar
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -26,11 +31,23 @@ std::string hasData(std::string s) {
   return "";
 }
 
-int main()
+
+std::vector<std::string> split(const std::string& s, char delimiter)
+{
+   std::vector<std::string> tokens;
+   std::string token;
+   std::istringstream tokenStream(s);
+   while (std::getline(tokenStream, token, delimiter))
+   {
+      tokens.push_back(token);
+   }
+   return tokens;
+}
+std::ofstream ukf_write(file_name);
+int main(int argc, char* argv[])
 {
   uWS::Hub h;
-
-  // Create a Kalman Filter instance
+  // Create an Unscented Kalman Filter instance
   UKF ukf;
 
   // used to compute the RMSE later
@@ -108,7 +125,7 @@ int main()
           //Call ProcessMeasurment(meas_package) for Kalman filter
     	  ukf.ProcessMeasurement(meas_package);    	  
 
-    	  //Push the current estimated x,y positon from the Kalman filter's state vector
+    	  //Push the current estimated x,y positon from the UKF's state vector
 
     	  VectorXd estimate(4);
 
@@ -128,7 +145,14 @@ int main()
     	  estimations.push_back(estimate);
 
     	  VectorXd RMSE = tools.CalculateRMSE(estimations, ground_truth);
-
+          
+          if (sensor_type.compare("L") == 0) {
+            ukf_write << sensor_type << "," << ukf.NIS_laser_ << std::endl;
+          }
+          else if(sensor_type.compare("R") == 0) {
+            ukf_write << sensor_type << "," << ukf.NIS_radar_ << std::endl;
+          }
+          
           json msgJson;
           msgJson["estimate_x"] = p_x;
           msgJson["estimate_y"] = p_y;
@@ -137,7 +161,8 @@ int main()
           msgJson["rmse_vx"] = RMSE(2);
           msgJson["rmse_vy"] = RMSE(3);
           auto msg = "42[\"estimate_marker\"," + msgJson.dump() + "]";
-          // std::cout << msg << std::endl;
+          std::cout << "RMSE_x: " << RMSE(0) << ", RMSE_y: " << RMSE(1) 
+                    << " RMSE_vx: " << RMSE(2) << " RMSE_vy: " << RMSE(3) <<  std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
 	  
         }
@@ -185,6 +210,7 @@ int main()
     return -1;
   }
   h.run();
+  ukf_write.close();
 }
 
 
