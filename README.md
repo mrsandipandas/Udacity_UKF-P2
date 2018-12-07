@@ -95,33 +95,34 @@ The simulation tool generates sensor data for a single tracked object.
 - The yaw rate  in rad/second `yaw_rate`
 
 **Algorithm**
-  * Get sensor data [L/R Data, Timestamp]
-   * If first measurement then initialize state vector [x] and state covariance matrix [P]
-   * Else compute the time difference [dt] between current sensor data timestamp and the previsous timestamp
+* Get sensor data [L/R Data, Timestamp]
+    * If first measurement then initialize state vector [x] and state covariance matrix [P]
+    * Else compute the time difference [dt] between current sensor data timestamp and the previsous timestamp
   
-  * Predict [x, P, Q, dt]
-   * Generate sigma points from state vector
-     Input: State vector [x] and State covariance matrix [P]
-     Output: Sigma points [x x+sqrt((lambda+nx)*P) x-sqrt((lambda+nx)*P)]
+* Predict `[x, P, Q, dt]`
+    * Generate sigma points from state vector
+    * Input: State vector `[x]` and State covariance matrix `[P]`
+     Output: Sigma points `[x x+sqrt((lambda+nx)*P) x-sqrt((lambda+nx)*P)]`
 
-   * Generate augmented sigma points
-     Input: Augmented State vector [x, Speed noise, Yaw rate noise] and Augmented State covariance matrix [P, Q]
-     Output: Augmented sigma points [x_aug x_aug+sqrt((lambda+n_aug)*P_aug) x_aug-sqrt((lambda+n_aug)*P_aug)] 
+* Generate augmented sigma points
+    * Input: Augmented State vector `[x, Speed noise, Yaw rate noise]` and Augmented State covariance matrix `[P, Q]`
+    * Output: Augmented sigma points `[x_aug x_aug+sqrt((lambda+n_aug)*P_aug) x_aug-sqrt((lambda+n_aug)*P_aug)]` 
 
-   * Predict sigma points from augmented sigma points using CTRV model
-     Input: Augmented sigma points [x_sigma_aug] and CTRV model
-     Output: Predicted sigma points [x_sigma_pred] 
+* Predict sigma points from augmented sigma points using CTRV model
+    * Input: Augmented sigma points `[x_sigma_aug]` and CTRV model
+    * Output: Predicted sigma points `[x_sigma_pred]` 
 
-   * Convert predicted sigma points to mean and covariance
-     Input: Predicted sigma points [x_sigma_pred] and Weights [w]
-     Output: Predicted state mean [x_sigma_pred_mean] and predicted state covariance [x_sigma_pred_covariance]
+* Convert predicted sigma points to mean and covariance
+    * Input: Predicted sigma points `[x_sigma_pred] and Weights `[w]`
+    * Output: Predicted state mean `[x_sigma_pred_mean]` and predicted state covariance `[x_sigma_pred_covariance]`
 
-  * Update [L/R Data, dt, w]
-   * Calculate cross correlation between the predicted state and the sensor data measurement
-     Input: Predicted state [x_sigma_pred], sensor data measurement [L/R data], timestamp [t + dt]
-     Output:  - Cross correlation [Sum (weights * (difference of predicted sigma points in state space) * (difference of predicted sigma points in measurement space)')]
-              - Kalman Gain
-              - NIS (Noise measurement intuition)
+* Update `[L/R Data, dt, w]`
+    * Calculate cross correlation between the predicted state and the sensor data measurement
+        * Input: Predicted state [x_sigma_pred], sensor data measurement [L/R data], timestamp [t + dt]
+        * Output:  
+            * Cross correlation [Sum (weights * (difference of predicted sigma points in state space) * (difference of predicted sigma points in measurement space)')]
+            * Kalman Gain
+            * NIS (Noise measurement intuition)
 
 ## Evaluation of the noise parameters
 
@@ -137,7 +138,7 @@ In case of LiDAR there are 2 DOF as we predict two variables `p_x` and `p_y`. Th
 
 ![Noise measurement intuition - LiDAR][image1]
 
-And in case of RADAR the DOF is 3 as we measure three variables `rho`, `rho_dot` and `phi`. The Chi-squared_distribution for 32DOF at 95% is = `5.991`.
+And in case of RADAR the DOF is 3 as we measure three variables `rho`, `rho_dot` and `phi`. The Chi-squared_distribution for 3DOF at 95% is = `5.991`.
 
 ![Noise measurement intuition - RADAR][image2]
 
